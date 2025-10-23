@@ -16,5 +16,8 @@
     "url": "https://github.com/narakode/rutte/issues"
   },
   "homepage": "https://github.com/narakode/rutte#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
 }
