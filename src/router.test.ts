@@ -3,28 +3,17 @@ import { Router } from './router.js';
 
 describe('Router', () => {
   describe('add item', () => {
-    test('should create a node', () => {
+    test('should have a root node', () => {
       const router = new Router();
 
-      router.addItem('/', null);
+      expect(router).toHaveProperty('root');
 
-      expect(router.items).toHaveLength(1);
-    });
+      const root = router.root;
 
-    test('should have path property', () => {
-      const router = new Router();
-
-      const item = router.addItem('/', null);
-
-      expect(item).toHaveProperty('path');
-    });
-
-    test('should have handler property', () => {
-      const router = new Router();
-
-      const item = router.addItem('/', null);
-
-      expect(item).toHaveProperty('handler');
+      expect(root).toEqual({
+        path: '',
+        handler: null,
+      });
     });
   });
 });
