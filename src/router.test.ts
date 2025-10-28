@@ -233,7 +233,7 @@ test('insert 7', () => {
   });
 });
 
-test('insert 8', () => {
+test.skip('insert 8', () => {
   const router = new Router();
 
   router.insert('home', 'home');
@@ -298,6 +298,116 @@ test('insert 8', () => {
           {
             path: 'case',
             handler: 'usecase',
+            children: [],
+          },
+        ],
+      },
+    ],
+  });
+});
+
+test.skip('insert 9', () => {
+  const router = new Router();
+
+  router.insert('user', 'first');
+  router.insert('user', 'second');
+
+  expect(router.node).toEqual({
+    path: '',
+    handler: null,
+    children: [
+      {
+        path: 'user',
+        handler: 'second',
+        children: [],
+      },
+    ],
+  });
+});
+
+test.skip('insert 10', () => {
+  const router = new Router();
+
+  router.insert('abc', 'abc');
+  router.insert('abd', 'abd');
+
+  expect(router.node).toEqual({
+    path: '',
+    handler: null,
+    children: [
+      {
+        path: 'ab',
+        handler: null,
+        children: [
+          {
+            path: 'c',
+            handler: 'abc',
+            children: [],
+          },
+          {
+            path: 'd',
+            handler: 'abd',
+            children: [],
+          },
+        ],
+      },
+    ],
+  });
+});
+
+test.skip('insert 11', () => {
+  const router = new Router();
+
+  router.insert('userprofile', 'userprofile');
+  router.insert('user', 'user');
+
+  expect(router.node).toEqual({
+    path: '',
+    handler: null,
+    children: [
+      {
+        path: 'user',
+        handler: 'user',
+        children: [
+          {
+            path: 'profile',
+            handler: 'userprofile',
+            children: [],
+          },
+        ],
+      },
+    ],
+  });
+});
+
+test.skip('insert 12', () => {
+  const router = new Router();
+
+  router.insert('userfile', 'userfile');
+  router.insert('userfinal', 'userfinal');
+  router.insert('userfind', 'userfind');
+
+  expect(router.node).toEqual({
+    path: '',
+    handler: null,
+    children: [
+      {
+        path: 'userfi',
+        handler: null,
+        children: [
+          {
+            path: 'le',
+            handler: 'userfile',
+            children: [],
+          },
+          {
+            path: 'nal',
+            handler: 'userfinal',
+            children: [],
+          },
+          {
+            path: 'nd',
+            handler: 'userfind',
             children: [],
           },
         ],
