@@ -11,11 +11,11 @@ export class Router<T> {
     children: [],
   };
 
-  insert(path: string) {
+  insert(path: string, handler: T) {
     if (!this.node.children.length) {
       this.node.children.push({
         path,
-        handler: null,
+        handler,
         children: [],
       });
 
@@ -55,7 +55,7 @@ export class Router<T> {
       if (longestCommonPrefixChildIndex === null) {
         root.children.push({
           path: search,
-          handler: null,
+          handler,
           children: [],
         });
 
@@ -78,18 +78,21 @@ export class Router<T> {
       if (search.length >= (longestCommonPrefixStart as number)) {
         root = parent;
 
-        const children = parent.children;
+        const copyChildren = parent.children;
+        const copyHandler = parent.handler;
 
         parent.children = [];
+        parent.handler = null;
 
         parent.children.push({
           path: parent.path.slice(longestCommonPrefixStart as number),
-          handler: null,
-          children: children,
+          handler: copyHandler,
+          children: copyChildren,
         });
         parent.path = parent.path.slice(0, longestCommonPrefixStart as number);
 
         if (parent.path === search) {
+          parent.handler = handler;
           inserted = true;
           break;
         }
