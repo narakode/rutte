@@ -12,6 +12,12 @@ export class Router<T> {
   };
 
   insert(path: string, handler: T) {
+    if (this.node.path === path) {
+      this.node.handler = handler;
+
+      return;
+    }
+
     if (!this.node.children.length) {
       this.node.children.push({
         path,

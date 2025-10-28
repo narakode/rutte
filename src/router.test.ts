@@ -412,3 +412,101 @@ test('insert 12', () => {
     ],
   });
 });
+
+test('insert 13', () => {
+  const router = new Router<string>();
+
+  router.insert('userprofile', 'userprofile');
+  router.insert('userprofile/settings', 'settings');
+
+  expect(router.node).toEqual({
+    path: '',
+    handler: null,
+    children: [
+      {
+        path: 'userprofile',
+        handler: 'userprofile',
+        children: [
+          {
+            path: '/settings',
+            handler: 'settings',
+            children: [],
+          },
+        ],
+      },
+    ],
+  });
+});
+
+test('insert 14', () => {
+  const router = new Router<string>();
+
+  router.insert('longprefix', 'lp');
+  router.insert('long', 'l');
+
+  expect(router.node).toEqual({
+    path: '',
+    handler: null,
+    children: [
+      {
+        path: 'long',
+        handler: 'l',
+        children: [
+          {
+            path: 'prefix',
+            handler: 'lp',
+            children: [],
+          },
+        ],
+      },
+    ],
+  });
+});
+
+test('insert 15', () => {
+  const router = new Router<string>();
+
+  router.insert('abcdpq', 'c');
+  router.insert('abcdxy', 'b');
+  router.insert('abcdefgh', 'a');
+
+  expect(router.node).toEqual({
+    path: '',
+    handler: null,
+    children: [
+      {
+        path: 'abcd',
+        handler: null,
+        children: [
+          {
+            path: 'pq',
+            handler: 'c',
+            children: [],
+          },
+          {
+            path: 'xy',
+            handler: 'b',
+            children: [],
+          },
+          {
+            path: 'efgh',
+            handler: 'a',
+            children: [],
+          },
+        ],
+      },
+    ],
+  });
+});
+
+test('insert 16', () => {
+  const router = new Router<string>();
+
+  router.insert('', 'root');
+
+  expect(router.node).toEqual({
+    path: '',
+    handler: 'root',
+    children: [],
+  });
+});
