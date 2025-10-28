@@ -26,7 +26,7 @@ export class Router<T> {
     let inserted = false;
     let search = path;
 
-    while (!inserted) {
+    insertedLoop: while (!inserted) {
       let longestCommonPrefixStart: number | null = null;
       let longestCommonPrefixChildIndex: number | null = null;
 
@@ -37,6 +37,12 @@ export class Router<T> {
         longestCommonPrefixChildIndex === null
       ) {
         const child = root.children[index];
+
+        if (child?.path === path) {
+          (root.children[index] as RoutePath<T>).handler = handler;
+
+          break insertedLoop;
+        }
 
         longestCommonPrefixStart = this.countLongestCommonPrefix(
           child as RoutePath<T>,

@@ -233,7 +233,7 @@ test('insert 7', () => {
   });
 });
 
-test.skip('insert 8', () => {
+test('insert 8', () => {
   const router = new Router();
 
   router.insert('home', 'home');
@@ -306,11 +306,12 @@ test.skip('insert 8', () => {
   });
 });
 
-test.skip('insert 9', () => {
+test('insert 9', () => {
   const router = new Router();
 
   router.insert('user', 'first');
   router.insert('user', 'second');
+  router.insert('user', 'third');
 
   expect(router.node).toEqual({
     path: '',
@@ -318,7 +319,7 @@ test.skip('insert 9', () => {
     children: [
       {
         path: 'user',
-        handler: 'second',
+        handler: 'third',
         children: [],
       },
     ],
