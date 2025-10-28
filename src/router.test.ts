@@ -326,7 +326,7 @@ test('insert 9', () => {
   });
 });
 
-test.skip('insert 10', () => {
+test('insert 10', () => {
   const router = new Router();
 
   router.insert('abc', 'abc');
@@ -356,7 +356,7 @@ test.skip('insert 10', () => {
   });
 });
 
-test.skip('insert 11', () => {
+test('insert 11', () => {
   const router = new Router();
 
   router.insert('userprofile', 'userprofile');
@@ -381,35 +381,31 @@ test.skip('insert 11', () => {
   });
 });
 
-test.skip('insert 12', () => {
+test('insert 12', () => {
   const router = new Router();
 
-  router.insert('userfile', 'userfile');
-  router.insert('userfinal', 'userfinal');
-  router.insert('userfind', 'userfind');
+  router.insert('user', 'user');
+  router.insert('user/home', 'userhome');
+  router.insert('use', 'use');
 
   expect(router.node).toEqual({
     path: '',
     handler: null,
     children: [
       {
-        path: 'userfi',
-        handler: null,
+        path: 'use',
+        handler: 'use',
         children: [
           {
-            path: 'le',
-            handler: 'userfile',
-            children: [],
-          },
-          {
-            path: 'nal',
-            handler: 'userfinal',
-            children: [],
-          },
-          {
-            path: 'nd',
-            handler: 'userfind',
-            children: [],
+            path: 'r',
+            handler: 'user',
+            children: [
+              {
+                path: '/home',
+                handler: 'userhome',
+                children: [],
+              },
+            ],
           },
         ],
       },
