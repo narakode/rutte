@@ -29,90 +29,51 @@ export class Router<T> {
     }
 
     let root = this.node;
-    let inserted = false;
     let search = path;
 
-    insertedLoop: while (!inserted) {
-      let longestCommonPrefixStart: number | null = null;
-      let longestCommonPrefixChildIndex: number | null = null;
+    while (true) {
+      const { childIndex, commonPrefixLen, replace } = this.findCommonRootChild(
+        root,
+        search,
+      );
 
-      let index = 0;
-
-      while (
-        index < root.children.length &&
-        longestCommonPrefixChildIndex === null
-      ) {
-        const child = root.children[index];
-
-        if (child?.path === path) {
-          (root.children[index] as RoutePath<T>).handler = handler;
-
-          break insertedLoop;
-        }
-
-        longestCommonPrefixStart = this.countLongestCommonPrefix(
-          child as RoutePath<T>,
-          search,
-        );
-
-        if (longestCommonPrefixStart > 0) {
-          longestCommonPrefixChildIndex = index;
-
-          break;
-        }
-
-        index++;
-      }
-
-      if (longestCommonPrefixChildIndex === null) {
+      if (childIndex === -1) {
         root.children.push({
           path: search,
           handler,
           children: [],
         });
 
-        inserted = true;
-
-        break;
+        return;
       }
 
-      const parent = root.children[
-        longestCommonPrefixChildIndex
-      ] as RoutePath<T>;
+      const parent = root.children[childIndex] as RoutePath<T>;
 
-      if (parent.path.length === (longestCommonPrefixStart as number)) {
-        root = parent;
-        search = search.slice(longestCommonPrefixStart as number);
+      if (replace) {
+        parent.handler = handler;
+
+        return;
+      }
+
+      root = parent;
+
+      if (parent.path.length === commonPrefixLen) {
+        search = search.slice(commonPrefixLen);
 
         continue;
       }
 
-      if (search.length >= (longestCommonPrefixStart as number)) {
-        root = parent;
+      this.splitChild(parent, commonPrefixLen);
 
-        const copyChildren = parent.children;
-        const copyHandler = parent.handler;
-
-        parent.children = [];
-        parent.handler = null;
-
-        parent.children.push({
-          path: parent.path.slice(longestCommonPrefixStart as number),
-          handler: copyHandler,
-          children: copyChildren,
-        });
-        parent.path = parent.path.slice(0, longestCommonPrefixStart as number);
-
-        if (parent.path === search) {
-          parent.handler = handler;
-          inserted = true;
-          break;
-        }
-
-        search = search.slice(longestCommonPrefixStart as number);
+      if (parent.path !== search) {
+        search = search.slice(commonPrefixLen);
 
         continue;
       }
+
+      parent.handler = handler;
+
+      return;
     }
   }
 
@@ -129,5 +90,53 @@ export class Router<T> {
     }
 
     return commonIndex;
+  }
+
+  private findCommonRootChild(
+    root: RoutePath<T>,
+    search: string,
+  ): { childIndex: number; commonPrefixLen: number; replace: boolean } {
+    for (let childIndex = 0; childIndex < root.children.length; childIndex++) {
+      const child = root.children[childIndex] as RoutePath<T>;
+
+      if (child.path === search) {
+        return {
+          childIndex,
+          commonPrefixLen: 0,
+          replace: true,
+        };
+      }
+
+      const commonPrefixLen = this.countLongestCommonPrefix(child, search);
+
+      if (commonPrefixLen > 0) {
+        return {
+          childIndex,
+          commonPrefixLen,
+          replace: false,
+        };
+      }
+    }
+
+    return {
+      childIndex: -1,
+      commonPrefixLen: 0,
+      replace: false,
+    };
+  }
+
+  private splitChild(child: RoutePath<T>, commonPrefixLen: number) {
+    const copyChildren = child.children;
+    const copyHandler = child.handler;
+
+    child.children = [];
+    child.handler = null;
+
+    child.children.push({
+      path: child.path.slice(commonPrefixLen),
+      handler: copyHandler,
+      children: copyChildren,
+    });
+    child.path = child.path.slice(0, commonPrefixLen);
   }
 }

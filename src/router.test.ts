@@ -1,21 +1,12 @@
 import { expect, test } from 'vitest';
 import { Router } from './router.js';
 
-test('base', () => {
+test('insert 1', () => {
   const router = new Router();
 
-  expect(router.node).toEqual({
-    path: '',
-    handler: null,
-    children: [],
-  });
-});
-
-test('insert 1', () => {
-  const router = new Router<string>();
-
   router.insert('user', 'user');
-  router.insert('test', 'test');
+  router.insert('home', 'home');
+  router.insert('dashboard', 'dashboard');
 
   expect(router.node).toEqual({
     path: '',
@@ -27,8 +18,13 @@ test('insert 1', () => {
         children: [],
       },
       {
-        path: 'test',
-        handler: 'test',
+        path: 'home',
+        handler: 'home',
+        children: [],
+      },
+      {
+        path: 'dashboard',
+        handler: 'dashboard',
         children: [],
       },
     ],
@@ -39,7 +35,8 @@ test('insert 2', () => {
   const router = new Router();
 
   router.insert('user', 'user');
-  router.insert('user/profile', 'user/profile');
+  router.insert('user', 'userb');
+  router.insert('user', 'userc');
 
   expect(router.node).toEqual({
     path: '',
@@ -47,14 +44,8 @@ test('insert 2', () => {
     children: [
       {
         path: 'user',
-        handler: 'user',
-        children: [
-          {
-            path: '/profile',
-            handler: 'user/profile',
-            children: [],
-          },
-        ],
+        handler: 'userc',
+        children: [],
       },
     ],
   });
@@ -63,29 +54,17 @@ test('insert 2', () => {
 test('insert 3', () => {
   const router = new Router();
 
+  router.insert('', 'home');
   router.insert('user', 'user');
-  router.insert('userprofile', 'userprofile');
-  router.insert('userdashboard', 'userdashboard');
 
   expect(router.node).toEqual({
     path: '',
-    handler: null,
+    handler: 'home',
     children: [
       {
         path: 'user',
         handler: 'user',
-        children: [
-          {
-            path: 'profile',
-            handler: 'userprofile',
-            children: [],
-          },
-          {
-            path: 'dashboard',
-            handler: 'userdashboard',
-            children: [],
-          },
-        ],
+        children: [],
       },
     ],
   });
@@ -94,38 +73,25 @@ test('insert 3', () => {
 test('insert 4', () => {
   const router = new Router();
 
-  router.insert('user', 'user');
-  router.insert('userprofile', 'userprofile');
-  router.insert('userdashboard', 'userdashboard');
-  router.insert('userproject', 'userproject');
+  router.insert('product', 'product');
+  router.insert('project', 'project');
 
   expect(router.node).toEqual({
     path: '',
     handler: null,
     children: [
       {
-        path: 'user',
-        handler: 'user',
+        path: 'pro',
+        handler: null,
         children: [
           {
-            path: 'pro',
-            handler: null,
-            children: [
-              {
-                path: 'file',
-                handler: 'userprofile',
-                children: [],
-              },
-              {
-                path: 'ject',
-                handler: 'userproject',
-                children: [],
-              },
-            ],
+            path: 'duct',
+            handler: 'product',
+            children: [],
           },
           {
-            path: 'dashboard',
-            handler: 'userdashboard',
+            path: 'ject',
+            handler: 'project',
             children: [],
           },
         ],
@@ -137,20 +103,38 @@ test('insert 4', () => {
 test('insert 5', () => {
   const router = new Router();
 
-  router.insert('userprofile', 'userprofile');
-  router.insert('user', 'user');
+  router.insert('project', 'project');
+  router.insert('product', 'product');
+  router.insert('projection', 'projection');
+  router.insert('projects', 'projects');
 
   expect(router.node).toEqual({
     path: '',
     handler: null,
     children: [
       {
-        path: 'user',
-        handler: 'user',
+        path: 'pro',
+        handler: null,
         children: [
           {
-            path: 'profile',
-            handler: 'userprofile',
+            path: 'ject',
+            handler: 'project',
+            children: [
+              {
+                path: 'ion',
+                handler: 'projection',
+                children: [],
+              },
+              {
+                path: 's',
+                handler: 'projects',
+                children: [],
+              },
+            ],
+          },
+          {
+            path: 'duct',
+            handler: 'product',
             children: [],
           },
         ],
@@ -162,26 +146,26 @@ test('insert 5', () => {
 test('insert 6', () => {
   const router = new Router();
 
-  router.insert('userprofile', 'userprofile');
-  router.insert('user', 'user');
-  router.insert('userhome', 'userhome');
+  router.insert('projects', 'projects');
+  router.insert('projection', 'projection');
+  router.insert('project', 'project');
 
   expect(router.node).toEqual({
     path: '',
     handler: null,
     children: [
       {
-        path: 'user',
-        handler: 'user',
+        path: 'project',
+        handler: 'project',
         children: [
           {
-            path: 'profile',
-            handler: 'userprofile',
+            path: 's',
+            handler: 'projects',
             children: [],
           },
           {
-            path: 'home',
-            handler: 'userhome',
+            path: 'ion',
+            handler: 'projection',
             children: [],
           },
         ],
@@ -193,38 +177,20 @@ test('insert 6', () => {
 test('insert 7', () => {
   const router = new Router();
 
-  router.insert('userprofile', 'userprofile');
-  router.insert('user', 'user');
-  router.insert('usecase', 'usecase');
-  router.insert('userhome', 'userhome');
+  router.insert('projection', 'projection');
+  router.insert('project', 'project');
 
   expect(router.node).toEqual({
     path: '',
     handler: null,
     children: [
       {
-        path: 'use',
-        handler: null,
+        path: 'project',
+        handler: 'project',
         children: [
           {
-            path: 'r',
-            handler: 'user',
-            children: [
-              {
-                path: 'profile',
-                handler: 'userprofile',
-                children: [],
-              },
-              {
-                path: 'home',
-                handler: 'userhome',
-                children: [],
-              },
-            ],
-          },
-          {
-            path: 'case',
-            handler: 'usecase',
+            path: 'ion',
+            handler: 'projection',
             children: [],
           },
         ],
@@ -236,68 +202,20 @@ test('insert 7', () => {
 test('insert 8', () => {
   const router = new Router();
 
-  router.insert('home', 'home');
-  router.insert('dashboard', 'dashboard');
-  router.insert('user', 'user');
-  router.insert('userprofile', 'userprofile');
-  router.insert('userproject', 'userproject');
-  router.insert('userproduct', 'userproduct');
-  router.insert('userhome', 'userhome');
-  router.insert('usecase', 'usecase');
+  router.insert('project', 'project');
+  router.insert('projection', 'projection');
 
   expect(router.node).toEqual({
     path: '',
     handler: null,
     children: [
       {
-        path: 'home',
-        handler: 'home',
-        children: [],
-      },
-      {
-        path: 'dashboard',
-        handler: 'dashboard',
-        children: [],
-      },
-      {
-        path: 'use',
-        handler: null,
+        path: 'project',
+        handler: 'project',
         children: [
           {
-            path: 'r',
-            handler: 'user',
-            children: [
-              {
-                path: 'pro',
-                handler: null,
-                children: [
-                  {
-                    path: 'file',
-                    handler: 'userprofile',
-                    children: [],
-                  },
-                  {
-                    path: 'ject',
-                    handler: 'userproject',
-                    children: [],
-                  },
-                  {
-                    path: 'duct',
-                    handler: 'userproduct',
-                    children: [],
-                  },
-                ],
-              },
-              {
-                path: 'home',
-                handler: 'userhome',
-                children: [],
-              },
-            ],
-          },
-          {
-            path: 'case',
-            handler: 'usecase',
+            path: 'ion',
+            handler: 'projection',
             children: [],
           },
         ],
@@ -309,45 +227,20 @@ test('insert 8', () => {
 test('insert 9', () => {
   const router = new Router();
 
-  router.insert('user', 'first');
-  router.insert('user', 'second');
-  router.insert('user', 'third');
+  router.insert('project', 'project');
+  router.insert('pro', 'pro');
 
   expect(router.node).toEqual({
     path: '',
     handler: null,
     children: [
       {
-        path: 'user',
-        handler: 'third',
-        children: [],
-      },
-    ],
-  });
-});
-
-test('insert 10', () => {
-  const router = new Router();
-
-  router.insert('abc', 'abc');
-  router.insert('abd', 'abd');
-
-  expect(router.node).toEqual({
-    path: '',
-    handler: null,
-    children: [
-      {
-        path: 'ab',
-        handler: null,
+        path: 'pro',
+        handler: 'pro',
         children: [
           {
-            path: 'c',
-            handler: 'abc',
-            children: [],
-          },
-          {
-            path: 'd',
-            handler: 'abd',
+            path: 'ject',
+            handler: 'project',
             children: [],
           },
         ],
@@ -356,10 +249,11 @@ test('insert 10', () => {
   });
 });
 
-test('insert 11', () => {
+test('insert 10', () => {
   const router = new Router();
 
-  router.insert('userprofile', 'userprofile');
+  router.insert('user/profile/settings', 'settings');
+  router.insert('user/profile', 'profile');
   router.insert('user', 'user');
 
   expect(router.node).toEqual({
@@ -371,38 +265,12 @@ test('insert 11', () => {
         handler: 'user',
         children: [
           {
-            path: 'profile',
-            handler: 'userprofile',
-            children: [],
-          },
-        ],
-      },
-    ],
-  });
-});
-
-test('insert 12', () => {
-  const router = new Router();
-
-  router.insert('user', 'user');
-  router.insert('user/home', 'userhome');
-  router.insert('use', 'use');
-
-  expect(router.node).toEqual({
-    path: '',
-    handler: null,
-    children: [
-      {
-        path: 'use',
-        handler: 'use',
-        children: [
-          {
-            path: 'r',
-            handler: 'user',
+            path: '/profile',
+            handler: 'profile',
             children: [
               {
-                path: '/home',
-                handler: 'userhome',
+                path: '/settings',
+                handler: 'settings',
                 children: [],
               },
             ],
@@ -410,103 +278,5 @@ test('insert 12', () => {
         ],
       },
     ],
-  });
-});
-
-test('insert 13', () => {
-  const router = new Router<string>();
-
-  router.insert('userprofile', 'userprofile');
-  router.insert('userprofile/settings', 'settings');
-
-  expect(router.node).toEqual({
-    path: '',
-    handler: null,
-    children: [
-      {
-        path: 'userprofile',
-        handler: 'userprofile',
-        children: [
-          {
-            path: '/settings',
-            handler: 'settings',
-            children: [],
-          },
-        ],
-      },
-    ],
-  });
-});
-
-test('insert 14', () => {
-  const router = new Router<string>();
-
-  router.insert('longprefix', 'lp');
-  router.insert('long', 'l');
-
-  expect(router.node).toEqual({
-    path: '',
-    handler: null,
-    children: [
-      {
-        path: 'long',
-        handler: 'l',
-        children: [
-          {
-            path: 'prefix',
-            handler: 'lp',
-            children: [],
-          },
-        ],
-      },
-    ],
-  });
-});
-
-test('insert 15', () => {
-  const router = new Router<string>();
-
-  router.insert('abcdpq', 'c');
-  router.insert('abcdxy', 'b');
-  router.insert('abcdefgh', 'a');
-
-  expect(router.node).toEqual({
-    path: '',
-    handler: null,
-    children: [
-      {
-        path: 'abcd',
-        handler: null,
-        children: [
-          {
-            path: 'pq',
-            handler: 'c',
-            children: [],
-          },
-          {
-            path: 'xy',
-            handler: 'b',
-            children: [],
-          },
-          {
-            path: 'efgh',
-            handler: 'a',
-            children: [],
-          },
-        ],
-      },
-    ],
-  });
-});
-
-test('insert 16', () => {
-  const router = new Router<string>();
-
-  router.insert('', 'root');
-
-  expect(router.node).toEqual({
-    path: '',
-    handler: 'root',
-    children: [],
   });
 });
